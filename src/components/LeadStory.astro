@@ -1,0 +1,58 @@
+---
+/** Homepage lead story. Ported from the first <article> in design/home.html. */
+import type { Article } from '../lib/articles';
+import { articlePath, heroPlaceholder, pillarLabel, readTime } from '../lib/articles';
+
+interface Props {
+  article: Article;
+}
+
+const { article } = Astro.props;
+const href = articlePath(article);
+---
+
+<article class="lead">
+  {article.data.heroImage ? (
+    <img class="lead__hero" src={article.data.heroImage} alt={article.data.heroAlt} width="1600" height="900" />
+  ) : (
+    <div class="lead__hero placeholder">{heroPlaceholder(article)}</div>
+  )}
+  <div><a class="tag" href={`/${article.data.pillar}/`}>{pillarLabel(article.data.pillar)}</a></div>
+  <h1 class="display lead__title"><a href={href}>{article.data.title}</a></h1>
+  <p class="lead__dek">{article.data.dek}</p>
+  <div class="lead__meta mono">{article.data.author} &middot; {readTime(article.body)} min read</div>
+</article>
+
+<style>
+  .lead {
+    flex: 999 1 560px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .lead__hero {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .lead__title {
+    font-size: clamp(44px, 6vw, 80px);
+    line-height: 0.95;
+    letter-spacing: -0.005em;
+  }
+
+  .lead__dek {
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--body-soft);
+    max-width: 640px;
+  }
+
+  .lead__meta {
+    color: var(--muted);
+  }
+</style>

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "what-a-race-is",
+    "order": 1,
+    "title": "What a HYROX race actually is",
+    "dek": "Eight runs, eight stations, one format everywhere. The whole thing in five minutes.",
+    "article": "what-a-hyrox-race-actually-is"
+  },
+  {
+    "id": "pick-your-division",
+    "order": 2,
+    "title": "Open, Pro, Doubles or Relay: pick your division",
+    "dek": "What changes between them and which one suits a first race.",
+    "article": "open-vs-pro-which-division-fits-your-first-race"
+  },
+  {
+    "id": "first-training-block",
+    "order": 3,
+    "title": "Your first training block",
+    "dek": "How to fit running, strength and station practice into one week.",
+    "article": "how-to-build-a-week-when-you-lift-and-run"
+  }
+]

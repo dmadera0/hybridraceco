@@ -1,0 +1,95 @@
+---
+/**
+ * The Weekly Split newsletter band. Ported from the accent <section> in design/home.html.
+ * UI only: no provider is wired up yet, so the form never submits.
+ */
+---
+
+<section class="newsletter" aria-labelledby="newsletter-title">
+  <div class="container newsletter__inner">
+    <div class="newsletter__copy">
+      <h2 id="newsletter-title" class="display newsletter__title">The Weekly Split</h2>
+      <p class="newsletter__dek">One email a week. Training, race news and gear, in that order.</p>
+    </div>
+    <form class="newsletter__form" onsubmit="return false">
+      <div class="newsletter__field">
+        <label for="nl-email" class="newsletter__label mono">EMAIL</label>
+        <input id="nl-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" class="newsletter__input" />
+      </div>
+      <button type="button" class="newsletter__button">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<style>
+  .newsletter {
+    background: var(--accent);
+    color: var(--ink);
+  }
+
+  .newsletter__inner {
+    padding-top: 48px;
+    padding-bottom: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px 48px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .newsletter__copy {
+    flex: 1 1 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .newsletter__title {
+    font-size: 44px;
+  }
+
+  .newsletter__dek {
+    margin: 0;
+    font-size: 17px;
+  }
+
+  .newsletter__form {
+    flex: 1 1 360px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+  }
+
+  .newsletter__field {
+    flex: 1 1 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .newsletter__label {
+    font-weight: 600;
+  }
+
+  .newsletter__input {
+    height: 48px;
+    width: 100%;
+    padding: 0 14px;
+    border: 2px solid var(--ink);
+    background: var(--ground);
+    color: var(--ink);
+    font-size: 16px;
+  }
+
+  .newsletter__button {
+    height: 48px;
+    padding: 0 24px;
+    border: 0;
+    background: var(--ink);
+    color: var(--ground);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+</style>

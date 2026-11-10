@@ -1,0 +1,98 @@
+---
+/** Numbered Latest list. Ported from the <aside aria-label="Latest stories"> in design/home.html. */
+import type { Article } from '../lib/articles';
+import { articlePath, pillarLabel } from '../lib/articles';
+
+interface Props {
+  articles: Article[];
+  allHref?: string;
+}
+
+const { articles, allHref = '/training/' } = Astro.props;
+---
+
+<aside aria-label="Latest stories" class="latest">
+  <div class="latest__head">
+    <h2 class="display latest__title">Latest</h2>
+    <a href={allHref} class="latest__all mono">All stories &rarr;</a>
+  </div>
+  <ol class="latest__list">
+    {articles.map((article, i) => (
+      <li class="latest__item">
+        <span class="latest__num mono">{String(i + 1).padStart(2, '0')}</span>
+        <div class="latest__body">
+          <span class="latest__pillar eyebrow">{pillarLabel(article.data.pillar)}</span>
+          <a href={articlePath(article)} class="latest__link">{article.data.title}</a>
+        </div>
+      </li>
+    ))}
+  </ol>
+</aside>
+
+<style>
+  .latest {
+    flex: 1 1 320px;
+    min-width: 0;
+  }
+
+  .latest__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: var(--rule-heavy);
+    padding-bottom: 10px;
+  }
+
+  .latest__title {
+    font-size: 28px;
+    line-height: normal;
+  }
+
+  .latest__all {
+    font-weight: 600;
+    padding: 12px 0;
+  }
+
+  .latest__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .latest__item {
+    display: flex;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: var(--rule-hair);
+  }
+
+  .latest__item:last-child {
+    border-bottom: 0;
+  }
+
+  .latest__num {
+    font-weight: 600;
+    padding-top: 5px;
+  }
+
+  .latest__body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .latest__pillar {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .latest__link {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 1.1;
+  }
+</style>

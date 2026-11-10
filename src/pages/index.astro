@@ -1,6 +1,30 @@
 ---
 import Base from '../layouts/Base.astro';
 import NextRaceStrip from '../components/NextRaceStrip.astro';
+import LeadStory from '../components/LeadStory.astro';
+import LatestList from '../components/LatestList.astro';
+import StartHere from '../components/StartHere.astro';
+import StationGrid from '../components/StationGrid.astro';
+import PillarColumns from '../components/PillarColumns.astro';
+import NewsletterBand from '../components/NewsletterBand.astro';
+import { PILLARS, getPublishedArticles, type Article, type Pillar } from '../lib/articles';
+
+const LATEST_COUNT = 5;
+const PER_PILLAR = 3;
+
+// Editorial rules: newest article leads, the next five are Latest, and each pillar
+// column shows its newest three that are not already on the page above.
+const articles = await getPublishedArticles();
+const [lead, ...others] = articles;
+const latest = others.slice(0, LATEST_COUNT);
+const shown = new Set([lead, ...latest].filter(Boolean).map((a) => a.id));
+
+const columns = Object.fromEntries(
+  PILLARS.map(({ slug }) => [
+    slug,
+    articles.filter((a) => a.data.pillar === slug && !shown.has(a.id)).slice(0, PER_PILLAR),
+  ]),
+) as Record<Pillar, Article[]>;
 ---
 
 <Base
@@ -8,32 +32,24 @@ import NextRaceStrip from '../components/NextRaceStrip.astro';
   description="Independent HYROX and hybrid racing coverage: training, races and news, gear."
 >
   <NextRaceStrip slot="before-header" />
-  <section class="container scaffold-note">
-    <span class="eyebrow">BUILD STEP 1</span>
-    <h1 class="display scaffold-note__title">[HOMEPAGE: built in step 2]</h1>
-    <p class="scaffold-note__dek">Tokens, fonts, base layout, header and footer are in place. Sections from the homepage mockup land in the next step.</p>
+
+  <section class="container hero" aria-label="Lead story and latest">
+    {lead && <LeadStory article={lead} />}
+    <LatestList articles={latest} />
   </section>
+
+  <StartHere />
+  <StationGrid />
+  <PillarColumns columns={columns} />
+  <NewsletterBand />
 </Base>
 
 <style>
-  .scaffold-note {
+  .hero {
     padding-top: 40px;
     padding-bottom: 56px;
     display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  .scaffold-note__title {
-    font-size: clamp(44px, 6vw, 80px);
-    line-height: 0.95;
-    letter-spacing: -0.005em;
-  }
-
-  .scaffold-note__dek {
-    margin: 0;
-    font-size: 19px;
-    color: var(--body-soft);
-    max-width: 640px;
+    flex-wrap: wrap;
+    gap: 48px;
   }
 </style>

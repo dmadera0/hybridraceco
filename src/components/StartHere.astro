@@ -1,0 +1,95 @@
+---
+/** Start Here: three numbered steps on ink. Ported from <section id="start"> in design/home.html. */
+import { getCollection, getEntry } from 'astro:content';
+import { articlePath } from '../lib/articles';
+
+const steps = (await getCollection('startHere')).sort((a, b) => a.data.order - b.data.order);
+const cards = await Promise.all(
+  steps.map(async (step) => {
+    const article = await getEntry(step.data.article);
+    return { ...step.data, href: article ? articlePath(article) : '/start-here/' };
+  }),
+);
+---
+
+<section id="start" class="start on-ink">
+  <div class="container start__inner">
+    <div class="start__head">
+      <span class="eyebrow start__eyebrow">START HERE</span>
+      <h2 class="display start__title">Never raced? Read these three, in order.</h2>
+    </div>
+    <div class="start__grid">
+      {cards.map((card) => (
+        <a href={card.href} class="start__card">
+          <span class="start__num">{String(card.order).padStart(2, '0')}</span>
+          <span class="start__card-title">{card.title}</span>
+          <span class="start__dek">{card.dek}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .start {
+    background: var(--ink);
+    color: var(--ground);
+  }
+
+  .start__inner {
+    padding-top: 56px;
+    padding-bottom: 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .start__head {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .start__eyebrow {
+    color: var(--accent);
+  }
+
+  .start__title {
+    font-size: clamp(36px, 4.4vw, 56px);
+  }
+
+  .start__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .start__card {
+    border: var(--rule-hair-dark);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 180px;
+  }
+
+  .start__num {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 48px;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .start__card-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.1;
+  }
+
+  .start__dek {
+    font-size: 15px;
+    color: var(--muted-dark);
+  }
+</style>

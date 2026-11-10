@@ -1,0 +1,103 @@
+---
+/** The course, station by station. Ported from <section id="stations"> in design/home.html. */
+import { getCollection } from 'astro:content';
+
+const stations = (await getCollection('stations', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const last = stations.length;
+---
+
+<section id="stations" class="container stations">
+  <div class="stations__head">
+    <h2 class="display stations__title">The course, station by station</h2>
+    <span class="stations__note mono">1 KM RUN BEFORE EVERY STATION</span>
+  </div>
+  <div class="stations__grid">
+    {stations.map((station) => (
+      <a
+        href={`/stations/${station.id}/`}
+        class:list={['station', { 'station--final': station.data.order === last }]}
+      >
+        <span class="station__num mono">{String(station.data.order).padStart(2, '0')}</span>
+        <span class="station__name">{station.data.title}</span>
+        <span class="station__metric mono">{station.data.metric}</span>
+        <span class="station__cta">Guide &rarr;</span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .stations {
+    padding-top: 64px;
+    padding-bottom: 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .stations__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .stations__title {
+    font-size: clamp(36px, 4.4vw, 56px);
+  }
+
+  .stations__note {
+    color: var(--muted);
+  }
+
+  .stations__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0;
+    border-top: var(--rule-heavy);
+    border-left: var(--rule-hair);
+  }
+
+  .station {
+    padding: 20px;
+    border-right: var(--rule-hair);
+    border-bottom: var(--rule-hair);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 132px;
+  }
+
+  .station--final {
+    background: var(--accent);
+  }
+
+  .station__num {
+    font-weight: 600;
+  }
+
+  .station__name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 30px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .station__metric {
+    color: var(--muted);
+  }
+
+  .station--final .station__metric {
+    color: var(--ink);
+  }
+
+  .station__cta {
+    margin-top: auto;
+    font-size: 14px;
+    font-weight: 600;
+  }
+</style>

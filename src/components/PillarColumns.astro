@@ -1,0 +1,101 @@
+---
+/** Three pillar columns. Ported from the three-column <section> in design/home.html. */
+import type { Article, Pillar } from '../lib/articles';
+import { PILLARS, articlePath, heroPlaceholder, pillarPath } from '../lib/articles';
+
+interface Props {
+  /** Articles per pillar, newest first; the first gets the image slot. */
+  columns: Record<Pillar, Article[]>;
+}
+
+const { columns } = Astro.props;
+---
+
+<section class="container pillars" aria-label="Browse by pillar">
+  {PILLARS.map(({ slug, label }) => {
+    const [first, ...rest] = columns[slug] ?? [];
+    return (
+      <div class="pillar">
+        <div class="pillar__head">
+          <h2 class="display pillar__title">{label}</h2>
+          <a href={pillarPath(slug)} class="pillar__all mono">All &rarr;</a>
+        </div>
+        {first && (
+          <>
+            {first.data.heroImage ? (
+              <img class="pillar__image" src={first.data.heroImage} alt={first.data.heroAlt} width="1200" height="800" />
+            ) : (
+              <div class="pillar__image placeholder">{heroPlaceholder(first)}</div>
+            )}
+            <a href={articlePath(first)} class="pillar__lead">{first.data.title}</a>
+          </>
+        )}
+        {rest.map((article) => (
+          <a href={articlePath(article)} class="pillar__item">{article.data.title}</a>
+        ))}
+      </div>
+    );
+  })}
+</section>
+
+<style>
+  .pillars {
+    padding-bottom: 72px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+  }
+
+  .pillar {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pillar__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: var(--rule-heavy);
+    padding-bottom: 8px;
+  }
+
+  .pillar__title {
+    font-size: 30px;
+    line-height: normal;
+  }
+
+  .pillar__all {
+    font-weight: 600;
+    padding: 12px 0;
+  }
+
+  .pillar__image {
+    aspect-ratio: 3 / 2;
+    width: 100%;
+    object-fit: cover;
+    margin-top: 18px;
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  .pillar__lead {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.08;
+    padding: 14px 0 18px;
+    border-bottom: var(--rule-hair);
+  }
+
+  .pillar__item {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.35;
+    padding: 16px 0;
+    border-bottom: var(--rule-hair);
+  }
+
+  .pillar__item:last-child {
+    border-bottom: 0;
+  }
+</style>
