@@ -1,0 +1,51 @@
+---
+/**
+ * Next-race strip above the header (homepage only).
+ * Ported from the first ink band in design/home.html.
+ * City and date are placeholders until real race data is wired in.
+ */
+interface Props {
+  city?: string;
+  date?: string;
+  href?: string;
+}
+
+const { city = '[NEXT RACE CITY]', date = '[RACE DATE]', href = '/races-news/' } = Astro.props;
+---
+
+<div class="next-race on-ink">
+  <div class="container next-race__inner">
+    <span class="next-race__label">NEXT UP &middot; {city} &middot; {date}</span>
+    <a href={href} class="next-race__link">Race guide &rarr;</a>
+  </div>
+</div>
+
+<style>
+  .next-race {
+    background: var(--ink);
+    color: var(--ground);
+  }
+
+  .next-race__inner {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  .next-race__label {
+    letter-spacing: 0.04em;
+  }
+
+  /* Accent as text is fine on ink (see CLAUDE.md) */
+  .next-race__link {
+    padding: 10px 0;
+    font-weight: 600;
+    color: var(--accent);
+  }
+</style>

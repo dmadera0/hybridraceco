@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import NextRaceStrip from '../components/NextRaceStrip.astro';
+---
+
+<Base
+  title="HybridRaceCo"
+  description="Independent HYROX and hybrid racing coverage: training, races and news, gear."
+>
+  <NextRaceStrip slot="before-header" />
+  <section class="container scaffold-note">
+    <span class="eyebrow">BUILD STEP 1</span>
+    <h1 class="display scaffold-note__title">[HOMEPAGE: built in step 2]</h1>
+    <p class="scaffold-note__dek">Tokens, fonts, base layout, header and footer are in place. Sections from the homepage mockup land in the next step.</p>
+  </section>
+</Base>
+
+<style>
+  .scaffold-note {
+    padding-top: 40px;
+    padding-bottom: 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .scaffold-note__title {
+    font-size: clamp(44px, 6vw, 80px);
+    line-height: 0.95;
+    letter-spacing: -0.005em;
+  }
+
+  .scaffold-note__dek {
+    margin: 0;
+    font-size: 19px;
+    color: var(--body-soft);
+    max-width: 640px;
+  }
+</style>

@@ -1,0 +1,96 @@
+---
+/**
+ * Site footer. Ported from the <footer> block in design/home.html (no divider, follows the
+ * accent newsletter band) and design/article.html (hairline divider, follows an ink section).
+ * Keep the disclaimer: not affiliated with or endorsed by HYROX.
+ */
+interface Props {
+  /** Draw a top hairline and use the tighter padding (article variant). */
+  divider?: boolean;
+}
+
+const { divider = false } = Astro.props;
+
+const links = [
+  { href: '/training/', label: 'Training' },
+  { href: '/races-news/', label: 'Races & News' },
+  { href: '/gear/', label: 'Gear' },
+  { href: '/#stations', label: 'Station Guides' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
+  { href: '/privacy/', label: 'Privacy' },
+];
+---
+
+<footer class:list={['site-footer', 'on-ink', { 'site-footer--divider': divider }]}>
+  <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <span class="site-footer__wordmark">HybridRaceCo</span>
+      <p class="site-footer__disclaimer">HybridRaceCo is an independent publication and is not affiliated with or endorsed by HYROX. Content is for information only and is not medical advice.</p>
+    </div>
+    <nav aria-label="Footer" class="footer-nav">
+      {links.map(({ href, label }) => <a href={href} class="footer-nav__link">{label}</a>)}
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--ink);
+    color: var(--ground);
+  }
+
+  .site-footer--divider {
+    border-top: var(--rule-hair-dark);
+  }
+
+  .site-footer__inner {
+    padding-top: 48px;
+    padding-bottom: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px 64px;
+    justify-content: space-between;
+  }
+
+  .site-footer--divider .site-footer__inner {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    gap: 24px 64px;
+  }
+
+  .site-footer__brand {
+    flex: 1 1 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .site-footer__wordmark {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 30px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .site-footer__disclaimer {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted-dark);
+    max-width: 420px;
+  }
+
+  .footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    align-items: flex-start;
+  }
+
+  .footer-nav__link {
+    padding: 12px 0;
+  }
+</style>

@@ -1,0 +1,27 @@
+/* Design tokens. Source of truth: CLAUDE.md and design/*.html. */
+:root {
+  /* colour */
+  --ground: #F3F4F1;      /* page background */
+  --ink: #101214;         /* text, dark sections, rules */
+  --accent: #C6F432;      /* tags, highlights, newsletter band; only ink text on top */
+  --muted: #555B63;       /* meta text on ground */
+  --body-soft: #3D434A;   /* deks, placeholder labels */
+  --rule: #C4C9C1;        /* hairlines on ground */
+  --muted-dark: #B4BAC0;  /* secondary text on ink */
+  --rule-dark: #4A5058;   /* borders on ink */
+  --placeholder: #D5D9D2; /* image placeholder fill on ground */
+  --placeholder-dark: #2A2E33; /* image placeholder fill on ink */
+
+  /* type */
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-body: Inter, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+
+  /* layout */
+  --container-max: 1240px;
+  --gutter: 24px;
+  --rule-heavy: 2px solid var(--ink);
+  --rule-hair: 1px solid var(--rule);
+  --rule-hair-dark: 1px solid var(--rule-dark);
+  --tap-min: 44px;
+}
