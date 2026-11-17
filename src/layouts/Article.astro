@@ -21,6 +21,7 @@ import {
   relatedArticles,
   splitForReadNext,
 } from '../lib/articles';
+import { SITE_NAME, isPlaceholder } from '../lib/site';
 
 interface Props {
   article: Article;
@@ -43,10 +44,53 @@ const html = article.rendered?.html;
 const split = html ? splitForReadNext(html) : undefined;
 
 const minutes = readTime(article.body);
+
+// Article and breadcrumb structured data. Placeholder values such as "[AUTHOR NAME]" are left out
+// rather than published as facts.
+const url = new URL(Astro.url.pathname, Astro.site).href;
+const pillarUrl = new URL(pillarPath(data.pillar), Astro.site).href;
+const articleLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: data.title,
+  description: data.dek,
+  datePublished: data.publishDate.toISOString(),
+  mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+  articleSection: pillarLabel(data.pillar),
+  publisher: { '@type': 'Organization', name: SITE_NAME, url: new URL('/', Astro.site).href },
+};
+if (!isPlaceholder(data.author)) articleLd.author = { '@type': 'Person', name: data.author };
+if (data.heroImage) articleLd.image = [new URL(data.heroImage, Astro.site).href];
+if (data.tags.length) articleLd.keywords = data.tags.join(', ');
+if (minutes) articleLd.timeRequired = `PT${minutes}M`;
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: pillarLabel(data.pillar), item: pillarUrl },
+    { '@type': 'ListItem', position: 3, name: data.title, item: url },
+  ],
+};
 const firstTag = data.tags[0];
 ---
 
-<Base title={data.title} description={data.dek} current={data.pillar} footerDivider>
+<Base
+  title={data.title}
+  description={data.dek}
+  current={data.pillar}
+  footerDivider
+  seo={{
+    type: 'article',
+    image: data.heroImage,
+    imageAlt: data.heroAlt,
+    publishedTime: data.publishDate,
+    section: pillarLabel(data.pillar),
+    tags: data.tags,
+    jsonLd: [articleLd, breadcrumbLd],
+  }}
+>
   <div class="container head">
     <nav aria-label="Breadcrumb" class="crumbs mono">
       <a href="/" class="crumbs__link">Home</a>
