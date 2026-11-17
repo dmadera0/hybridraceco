@@ -1,0 +1,74 @@
+---
+/** Pillar listing: /training/, /races-news/, /gear/. Newest article featured, the rest in a grid. */
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import NewsletterBand from '../../components/NewsletterBand.astro';
+import { PILLARS, getPublishedArticles } from '../../lib/articles';
+
+export async function getStaticPaths() {
+  const articles = await getPublishedArticles();
+  return PILLARS.map((pillar) => ({
+    params: { pillar: pillar.slug },
+    props: { pillar, articles: articles.filter((a) => a.data.pillar === pillar.slug) },
+  }));
+}
+
+const { pillar, articles } = Astro.props;
+const [feature, ...rest] = articles;
+---
+
+<Base title={pillar.label} description={pillar.dek} current={pillar.slug}>
+  <PageHead
+    crumbs={[{ href: '/', label: 'Home' }, { label: pillar.label }]}
+    title={pillar.label}
+    dek={pillar.dek}
+  >
+    <span class="count mono">{articles.length} {articles.length === 1 ? 'ARTICLE' : 'ARTICLES'}</span>
+  </PageHead>
+
+  <section class="container listing" aria-label={`${pillar.label} articles`}>
+    {feature ? (
+      <>
+        <ArticleCard article={feature} feature />
+        {rest.length > 0 && (
+          <div class="listing__grid">
+            {rest.map((article) => <ArticleCard article={article} />)}
+          </div>
+        )}
+      </>
+    ) : (
+      <p class="listing__empty">[NO ARTICLES YET]</p>
+    )}
+  </section>
+
+  <NewsletterBand />
+</Base>
+
+<style>
+  .count {
+    color: var(--muted);
+    padding-bottom: 8px;
+    border-bottom: var(--rule-heavy);
+  }
+
+  .listing {
+    padding-top: 40px;
+    padding-bottom: 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .listing__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 48px 32px;
+  }
+
+  .listing__empty {
+    margin: 0;
+    font-family: var(--font-mono);
+    color: var(--body-soft);
+  }
+</style>

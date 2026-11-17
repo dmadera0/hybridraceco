@@ -1,0 +1,185 @@
+---
+/**
+ * Station guide: /stations/<slug>/. No dedicated mockup; reuses the article page head,
+ * prose body and the homepage station grid so readers can move along the course.
+ */
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import StationGrid from '../../components/StationGrid.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getPublishedArticles } from '../../lib/articles';
+
+export async function getStaticPaths() {
+  const stations = (await getCollection('stations', ({ data }) => !data.draft)).sort(
+    (a, b) => a.data.order - b.data.order,
+  );
+  return stations.map((station, i) => ({
+    params: { slug: station.id },
+    props: { station, prev: stations[i - 1], next: stations[i + 1] },
+  }));
+}
+
+const { station, prev, next } = Astro.props;
+const { data } = station;
+const { Content } = await render(station);
+const num = String(data.order).padStart(2, '0');
+
+// Articles tagged with this station's name, newest first.
+const related = (await getPublishedArticles())
+  .filter((a) => a.data.tags.some((t) => t.toLowerCase() === data.title.toLowerCase()))
+  .slice(0, 3);
+---
+
+<Base title={`${data.title} station guide`} description={data.dek} current="stations">
+  <PageHead
+    crumbs={[{ href: '/', label: 'Home' }, { href: '/#stations', label: 'Station Guides' }, { label: data.title }]}
+    eyebrow={`STATION ${num} OF 8`}
+    title={data.title}
+    dek={data.dek}
+  />
+
+  <div class="container layout">
+    <aside class="facts" aria-label="Station at a glance">
+      <span class="facts__label eyebrow">AT A GLANCE</span>
+      <dl class="facts__list">
+        <div class="facts__row"><dt>Order</dt><dd class="mono">{num} / 08</dd></div>
+        {/* Only show a workload when it is a distance. Wall Balls reps stay omitted until checked. */}
+        {/\d/.test(data.metric) && <div class="facts__row"><dt>Work</dt><dd class="mono">{data.metric}</dd></div>}
+        <div class="facts__row"><dt>Before it</dt><dd class="mono">1 km run</dd></div>
+      </dl>
+    </aside>
+
+    <article class="body prose">
+      <Content />
+    </article>
+  </div>
+
+  <nav class="container steps" aria-label="Previous and next station">
+    {prev ? (
+      <a href={`/stations/${prev.id}/`} class="step">
+        <span class="eyebrow step__label">&larr; PREVIOUS STATION</span>
+        <span class="step__name">{prev.data.title}</span>
+      </a>
+    ) : <span />}
+    {next && (
+      <a href={`/stations/${next.id}/`} class="step step--next">
+        <span class="eyebrow step__label">NEXT STATION &rarr;</span>
+        <span class="step__name">{next.data.title}</span>
+      </a>
+    )}
+  </nav>
+
+  {related.length > 0 && (
+    <section class="container related">
+      <h2 class="display related__title">Read more on the {data.title}</h2>
+      <div class="related__grid">
+        {related.map((article) => <ArticleCard article={article} />)}
+      </div>
+    </section>
+  )}
+
+  <StationGrid current={station.id} title="The full course" />
+</Base>
+
+<style>
+  .layout {
+    padding-top: 48px;
+    padding-bottom: 56px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 72px;
+  }
+
+  .facts {
+    flex: 1 1 240px;
+    min-width: 0;
+    max-width: 320px;
+    border-top: var(--rule-heavy);
+    padding-top: 12px;
+    align-self: flex-start;
+  }
+
+  .facts__label {
+    font-weight: 600;
+  }
+
+  .facts__list {
+    margin: 6px 0 0;
+  }
+
+  .facts__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 11px 0;
+    border-bottom: var(--rule-hair);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .facts__row:last-child {
+    border-bottom: 0;
+  }
+
+  .facts__row dd {
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .body {
+    flex: 999 1 560px;
+    min-width: 0;
+    max-width: 700px;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px 24px;
+  }
+
+  .step {
+    padding: 18px 20px;
+    border: 2px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .step--next {
+    text-align: right;
+  }
+
+  .step__label {
+    color: var(--muted);
+  }
+
+  .step__name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 30px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .related {
+    padding-top: 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .related__title {
+    font-size: 30px;
+    line-height: normal;
+    padding-bottom: 8px;
+    border-bottom: var(--rule-heavy);
+  }
+
+  .related__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 32px;
+  }
+</style>

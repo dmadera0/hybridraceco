@@ -1,0 +1,101 @@
+/* Long-form body copy for articles and station guides.
+   Ported from the <article> body in design/article.html. */
+.prose {
+  font-size: 18px;
+  line-height: 1.65;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.prose > * {
+  margin: 0;
+}
+
+.prose h2 {
+  margin-top: 16px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 40px;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.prose h2:first-child {
+  margin-top: 0;
+}
+
+.prose h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.prose p a,
+.prose li a {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.prose blockquote {
+  margin: 8px 0;
+  padding: 20px 24px;
+  background: var(--accent);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.1;
+}
+
+.prose blockquote p {
+  margin: 0;
+}
+
+.prose ul {
+  padding-left: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Ordered lists render as the lettered, ruled list from the mockup. */
+.prose ol {
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  display: flex;
+  flex-direction: column;
+  border-top: var(--rule-heavy);
+}
+
+.prose ol > li {
+  counter-increment: step;
+  position: relative;
+  padding: 18px 0 18px 56px;
+  border-bottom: var(--rule-hair);
+}
+
+.prose ol > li::before {
+  content: counter(step, upper-alpha);
+  position: absolute;
+  left: 0;
+  top: 18px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 40px;
+  line-height: 1;
+}
+
+.prose img {
+  width: 100%;
+  height: auto;
+}
+
+.prose hr {
+  border: 0;
+  border-top: var(--rule-heavy);
+}

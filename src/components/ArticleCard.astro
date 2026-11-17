@@ -1,0 +1,108 @@
+---
+/** Article card on ground: image, pillar, title, dek, meta. Light-ground version of "More like this". */
+import type { Article } from '../lib/articles';
+import { articlePath, formatDate, heroPlaceholder, isoDate, readTime } from '../lib/articles';
+
+interface Props {
+  article: Article;
+  /** Larger treatment for the first item on a listing page. */
+  feature?: boolean;
+}
+
+const { article, feature = false } = Astro.props;
+const { data } = article;
+---
+
+<article class:list={['card', { 'card--feature': feature }]}>
+  {data.heroImage ? (
+    <img class="card__image" src={data.heroImage} alt={data.heroAlt} width="1200" height="800" />
+  ) : (
+    <div class="card__image placeholder">{heroPlaceholder(article)}</div>
+  )}
+  <div class="card__text">
+    <h2 class="card__title"><a href={articlePath(article)}>{data.title}</a></h2>
+    <p class="card__dek">{data.dek}</p>
+    <div class="card__meta mono">
+      <time datetime={isoDate(data.publishDate)}>{formatDate(data.publishDate)}</time>
+      <span>{readTime(article.body)} min read</span>
+    </div>
+  </div>
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .card__image {
+    aspect-ratio: 3 / 2;
+    width: 100%;
+    object-fit: cover;
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  .card__text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.08;
+  }
+
+  .card__dek {
+    margin: 0;
+    font-size: 16px;
+    color: var(--body-soft);
+  }
+
+  .card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    color: var(--muted);
+  }
+
+  /* Feature: image beside text on wide screens, stacked on narrow. */
+  .card--feature {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 18px 40px;
+    padding-bottom: 40px;
+    border-bottom: var(--rule-heavy);
+  }
+
+  .card--feature .card__image {
+    flex: 999 1 560px;
+    aspect-ratio: 16 / 9;
+    padding: 16px;
+    font-size: 13px;
+  }
+
+  .card--feature .card__text {
+    flex: 1 1 320px;
+    min-width: 0;
+    justify-content: flex-end;
+    gap: 14px;
+  }
+
+  .card--feature .card__title {
+    font-weight: 800;
+    font-size: clamp(32px, 3.4vw, 44px);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .card--feature .card__dek {
+    font-size: 19px;
+  }
+</style>

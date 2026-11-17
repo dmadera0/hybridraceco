@@ -1,0 +1,135 @@
+---
+/** "Next in <pillar>" banner plus "More like this" grid on ink. From the final <section> in design/article.html. */
+import type { Article } from '../lib/articles';
+import { articlePath, heroPlaceholder, pillarLabel } from '../lib/articles';
+
+interface Props {
+  next?: Article;
+  related: Article[];
+}
+
+const { next, related } = Astro.props;
+---
+
+<section class="after on-ink" aria-label="Keep reading">
+  <div class="container after__inner">
+    {next && (
+      <a href={articlePath(next)} class="next">
+        <span class="next__text">
+          <span class="next__label eyebrow">NEXT IN {pillarLabel(next.data.pillar).toUpperCase()}</span>
+          <span class="display next__title">{next.data.title}</span>
+        </span>
+        <span class="next__cta">Keep reading &rarr;</span>
+      </a>
+    )}
+    {related.length > 0 && (
+      <div class="more">
+        <h2 class="display more__title">More like this</h2>
+        <div class="more__grid">
+          {related.map((article) => (
+            <a href={articlePath(article)} class="more__card">
+              {article.data.heroImage ? (
+                <img class="more__image" src={article.data.heroImage} alt={article.data.heroAlt} width="1200" height="800" />
+              ) : (
+                <span class="more__image placeholder">{heroPlaceholder(article)}</span>
+              )}
+              <span class="more__pillar eyebrow">{pillarLabel(article.data.pillar).toUpperCase()}</span>
+              <span class="more__card-title">{article.data.title}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .after {
+    background: var(--ink);
+    color: var(--ground);
+  }
+
+  .after__inner {
+    padding-top: 56px;
+    padding-bottom: 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .next {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 48px;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: 32px;
+    border-bottom: var(--rule-hair-dark);
+  }
+
+  .next__text {
+    flex: 1 1 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .next__label {
+    color: var(--accent);
+  }
+
+  .next__title {
+    font-size: clamp(36px, 4.6vw, 60px);
+  }
+
+  .next__cta {
+    background: var(--accent);
+    color: var(--ink);
+    padding: 14px 22px;
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .more {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .more__title {
+    font-size: 30px;
+    line-height: normal;
+  }
+
+  .more__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .more__card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .more__image {
+    aspect-ratio: 3 / 2;
+    width: 100%;
+    object-fit: cover;
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  .more__pillar {
+    font-size: 12px;
+    color: var(--muted-dark);
+  }
+
+  .more__card-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.1;
+  }
+</style>

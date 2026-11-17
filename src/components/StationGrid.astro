@@ -2,15 +2,24 @@
 /** The course, station by station. Ported from <section id="stations"> in design/home.html. */
 import { getCollection } from 'astro:content';
 
+interface Props {
+  /** Slug of the station being viewed; its card is marked as the current page. */
+  current?: string;
+  /** Heading text. Station guide pages use a shorter label. */
+  title?: string;
+}
+
+const { current, title = 'The course, station by station' } = Astro.props;
+
 const stations = (await getCollection('stations', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order,
 );
 const last = stations.length;
 ---
 
-<section id="stations" class="container stations">
+<section id={current ? undefined : 'stations'} class="container stations">
   <div class="stations__head">
-    <h2 class="display stations__title">The course, station by station</h2>
+    <h2 class="display stations__title">{title}</h2>
     <span class="stations__note mono">1 KM RUN BEFORE EVERY STATION</span>
   </div>
   <div class="stations__grid">
@@ -18,11 +27,12 @@ const last = stations.length;
       <a
         href={`/stations/${station.id}/`}
         class:list={['station', { 'station--final': station.data.order === last }]}
+        aria-current={station.id === current ? 'page' : undefined}
       >
         <span class="station__num mono">{String(station.data.order).padStart(2, '0')}</span>
         <span class="station__name">{station.data.title}</span>
         <span class="station__metric mono">{station.data.metric}</span>
-        <span class="station__cta">Guide &rarr;</span>
+        <span class="station__cta">{station.id === current ? 'You are here' : <>Guide &rarr;</>}</span>
       </a>
     ))}
   </div>
@@ -93,6 +103,10 @@ const last = stations.length;
 
   .station--final .station__metric {
     color: var(--ink);
+  }
+
+  .station[aria-current='page'] {
+    box-shadow: inset 0 -4px 0 var(--ink);
   }
 
   .station__cta {

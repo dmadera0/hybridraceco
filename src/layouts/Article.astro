@@ -1,0 +1,197 @@
+---
+/**
+ * Article page. Ported from design/article.html: breadcrumb, tag, headline, dek, byline, hero,
+ * sidebar (contents + short version), body with inline Read Next card, tags, Next in pillar,
+ * More like this. Canonical/Open Graph/Article structured data are added in build step 5.
+ */
+import { getEntry, render } from 'astro:content';
+import Base from './Base.astro';
+import ArticleSidebar from '../components/ArticleSidebar.astro';
+import ReadNextCard from '../components/ReadNextCard.astro';
+import NextInPillar from '../components/NextInPillar.astro';
+import {
+  type Article,
+  formatDate,
+  getPublishedArticles,
+  heroPlaceholder,
+  isoDate,
+  pillarLabel,
+  pillarPath,
+  readTime,
+  relatedArticles,
+  splitForReadNext,
+} from '../lib/articles';
+
+interface Props {
+  article: Article;
+}
+
+const { article } = Astro.props;
+const { data } = article;
+const { Content, headings } = await render(article);
+
+const all = await getPublishedArticles();
+const samePillar = all.filter((a) => a.data.pillar === data.pillar && a.id !== article.id);
+
+const next = (data.next && (await getEntry(data.next))) || samePillar[0];
+const readNext = (data.readNext && (await getEntry(data.readNext))) || next;
+const related = relatedArticles(article, all, next ? [next.id] : []);
+
+// Markdown entries expose rendered HTML, which lets the Read Next card sit after the second
+// section as in the mockup. MDX renders through <Content /> with the card after the body.
+const html = article.rendered?.html;
+const split = html ? splitForReadNext(html) : undefined;
+
+const minutes = readTime(article.body);
+const firstTag = data.tags[0];
+---
+
+<Base title={data.title} description={data.dek} current={data.pillar} footerDivider>
+  <div class="container head">
+    <nav aria-label="Breadcrumb" class="crumbs mono">
+      <a href="/" class="crumbs__link">Home</a>
+      <span class="crumbs__sep">/</span>
+      <a href={pillarPath(data.pillar)} class="crumbs__link">{pillarLabel(data.pillar)}</a>
+      {firstTag && (
+        <>
+          <span class="crumbs__sep">/</span>
+          <span class="crumbs__current" aria-current="page">{firstTag}</span>
+        </>
+      )}
+    </nav>
+    <div><a class="tag" href={pillarPath(data.pillar)}>{pillarLabel(data.pillar)}</a></div>
+    <h1 class="display head__title">{data.title}</h1>
+    <p class="head__dek">{data.dek}</p>
+    <div class="byline mono">
+      <span>By {data.author}</span>
+      <time datetime={isoDate(data.publishDate)}>{formatDate(data.publishDate)}</time>
+      <span>{minutes} min read</span>
+    </div>
+    {data.heroImage ? (
+      <img class="hero" src={data.heroImage} alt={data.heroAlt} width="2100" height="900" />
+    ) : (
+      <div class="hero placeholder">{heroPlaceholder(article)}</div>
+    )}
+  </div>
+
+  <div class="container layout">
+    <ArticleSidebar headings={headings} summary={data.summary} />
+
+    <article class="body prose">
+      {split ? (
+        <>
+          <Fragment set:html={split.before} />
+          {readNext && <ReadNextCard article={readNext} />}
+          <Fragment set:html={split.after} />
+        </>
+      ) : (
+        <>
+          <Content />
+          {readNext && <ReadNextCard article={readNext} />}
+        </>
+      )}
+
+      {data.tags.length > 0 && (
+        <div class="tags mono">
+          <span class="tags__label">FILED UNDER</span>
+          {data.tags.map((tag) => <span class="tags__item">{tag}</span>)}
+        </div>
+      )}
+    </article>
+  </div>
+
+  <NextInPillar next={next} related={related} />
+</Base>
+
+<style>
+  .head {
+    padding-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .crumbs {
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .crumbs__link,
+  .crumbs__sep,
+  .crumbs__current {
+    padding: 8px 0;
+  }
+
+  .crumbs__current {
+    color: var(--ink);
+  }
+
+  .head__title {
+    max-width: 1000px;
+    font-size: clamp(44px, 6.4vw, 88px);
+    line-height: 0.95;
+  }
+
+  .head__dek {
+    margin: 0;
+    max-width: 720px;
+    font-size: 21px;
+    line-height: 1.45;
+    color: var(--body-soft);
+  }
+
+  .byline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    color: var(--muted);
+    padding-bottom: 8px;
+  }
+
+  .hero {
+    aspect-ratio: 21 / 9;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .layout {
+    padding-top: 48px;
+    padding-bottom: 72px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 72px;
+  }
+
+  /* Body column layout. Element styles come from the shared .prose class in styles/prose.css. */
+  .body {
+    flex: 999 1 560px;
+    min-width: 0;
+    max-width: 700px;
+    font-size: 18px;
+    line-height: 1.65;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .tags {
+    margin-top: 16px;
+    padding-top: 20px;
+    border-top: var(--rule-heavy);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .tags__label {
+    color: var(--muted);
+  }
+
+  .tags__item {
+    padding: 10px 14px;
+    border: 1px solid var(--ink);
+  }
+</style>

@@ -18,8 +18,10 @@ const articles = defineCollection({
     heroAlt: z.string(),
     /** The short version: exactly three bullets. */
     summary: z.array(z.string()).length(3),
-    /** Slug of the next article in the same pillar. */
+    /** Slug of the next article in the same pillar (the "Next in <pillar>" banner). */
     next: reference('articles').optional(),
+    /** Slug for the inline Read Next card in the body. Falls back to `next`. */
+    readNext: reference('articles').optional(),
     draft: z.boolean().default(false),
   }),
 });

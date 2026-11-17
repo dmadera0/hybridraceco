@@ -1,0 +1,85 @@
+---
+/**
+ * Page heading for listing and guide pages: breadcrumb, optional eyebrow, display title, dek.
+ * Reuses the breadcrumb and headline treatment from design/article.html.
+ */
+interface Crumb {
+  href?: string;
+  label: string;
+}
+
+interface Props {
+  crumbs: Crumb[];
+  title: string;
+  dek?: string;
+  /** Mono label above the title, e.g. "STATION 01". */
+  eyebrow?: string;
+  /** Accent tag above the title, as on articles. */
+  tag?: string;
+}
+
+const { crumbs, title, dek, eyebrow, tag } = Astro.props;
+---
+
+<div class="container page-head">
+  <nav aria-label="Breadcrumb" class="crumbs mono">
+    {crumbs.map((crumb, i) => (
+      <>
+        {i > 0 && <span class="crumbs__sep">/</span>}
+        {crumb.href ? (
+          <a href={crumb.href} class="crumbs__item">{crumb.label}</a>
+        ) : (
+          <span class="crumbs__item crumbs__item--current" aria-current="page">{crumb.label}</span>
+        )}
+      </>
+    ))}
+  </nav>
+  {tag && <div><span class="tag">{tag}</span></div>}
+  {eyebrow && <span class="eyebrow page-head__eyebrow">{eyebrow}</span>}
+  <h1 class="display page-head__title">{title}</h1>
+  {dek && <p class="page-head__dek">{dek}</p>}
+  <slot />
+</div>
+
+<style>
+  .page-head {
+    padding-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .crumbs {
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .crumbs__item,
+  .crumbs__sep {
+    padding: 8px 0;
+  }
+
+  .crumbs__item--current {
+    color: var(--ink);
+  }
+
+  .page-head__eyebrow {
+    font-weight: 600;
+  }
+
+  .page-head__title {
+    max-width: 1000px;
+    font-size: clamp(44px, 6.4vw, 88px);
+    line-height: 0.95;
+  }
+
+  .page-head__dek {
+    margin: 0;
+    max-width: 720px;
+    font-size: 21px;
+    line-height: 1.45;
+    color: var(--body-soft);
+  }
+</style>

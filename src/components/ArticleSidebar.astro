@@ -1,0 +1,94 @@
+---
+/** Article sidebar: table of contents from h2 headings, plus the short version. From design/article.html. */
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  summary: string[];
+}
+
+const { headings, summary } = Astro.props;
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<aside class="sidebar">
+  {toc.length > 0 && (
+    <nav aria-label="In this guide" class="toc">
+      <span class="toc__label eyebrow">IN THIS GUIDE</span>
+      {toc.map((h, i) => (
+        <a href={`#${h.slug}`} class="toc__link">
+          <span class="toc__num">{String(i + 1).padStart(2, '0')}</span>
+          {h.text}
+        </a>
+      ))}
+    </nav>
+  )}
+  <div class="short on-ink">
+    <span class="short__label eyebrow">THE SHORT VERSION</span>
+    <ul class="short__list">
+      {summary.map((point) => <li>{point}</li>)}
+    </ul>
+  </div>
+</aside>
+
+<style>
+  .sidebar {
+    flex: 1 1 240px;
+    min-width: 0;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .toc {
+    display: flex;
+    flex-direction: column;
+    border-top: var(--rule-heavy);
+    padding-top: 12px;
+  }
+
+  .toc__label {
+    font-weight: 600;
+    padding-bottom: 6px;
+  }
+
+  .toc__link {
+    padding: 11px 0;
+    font-size: 15px;
+    font-weight: 600;
+    border-bottom: var(--rule-hair);
+  }
+
+  .toc__link:last-child {
+    border-bottom: 0;
+  }
+
+  .toc__num {
+    display: inline-block;
+    margin-right: 0.5em;
+  }
+
+  .short {
+    background: var(--ink);
+    color: var(--ground);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .short__label {
+    color: var(--accent);
+  }
+
+  .short__list {
+    margin: 0;
+    padding-left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+</style>

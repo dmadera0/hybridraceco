@@ -1,0 +1,38 @@
+---
+/** Inline Read Next card inside the article body. Ported from the bordered <a> in design/article.html. */
+import type { Article } from '../lib/articles';
+import { articlePath } from '../lib/articles';
+
+interface Props {
+  article: Article;
+}
+
+const { article } = Astro.props;
+---
+
+<a href={articlePath(article)} class="read-next">
+  <span class="read-next__label eyebrow">READ NEXT</span>
+  <span class="read-next__title">{article.data.title} &rarr;</span>
+</a>
+
+<style>
+  .read-next {
+    margin: 8px 0;
+    padding: 18px 20px;
+    border: 2px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .read-next__label {
+    color: var(--muted);
+  }
+
+  .read-next__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.1;
+  }
+</style>
