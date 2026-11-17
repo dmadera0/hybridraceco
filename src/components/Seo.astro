@@ -19,6 +19,8 @@ interface Props {
   tags?: string[];
   /** Structured data objects, each rendered as its own JSON-LD script. */
   jsonLd?: Record<string, unknown>[];
+  /** Keep the page out of search results (404). Drops the canonical link. */
+  noindex?: boolean;
 }
 
 const {
@@ -31,6 +33,7 @@ const {
   section,
   tags = [],
   jsonLd = [],
+  noindex = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -40,7 +43,7 @@ const rssUrl = new URL('/rss.xml', Astro.site).href;
 
 <title>{title}</title>
 <meta name="description" content={description} />
-<link rel="canonical" href={canonical.href} />
+{noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical.href} />}
 <link rel="alternate" type="application/rss+xml" title={SITE_NAME} href={rssUrl} />
 <link rel="sitemap" href="/sitemap-index.xml" />
 

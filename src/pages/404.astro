@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import StationGrid from '../components/StationGrid.astro';
+---
+
+<Base title="Page not found" description="This page does not exist on HybridRaceCo." seo={{ noindex: true }}>
+  <PageHead
+    crumbs={[{ href: '/', label: 'Home' }, { label: 'Not found' }]}
+    eyebrow="404"
+    title="Wrong turn on the course"
+    dek="This page doesn't exist or has moved. Try a section below, or start from the homepage."
+  >
+    <nav aria-label="Sections" class="links">
+      <a href="/" class="links__item">Homepage &rarr;</a>
+      <a href="/training/" class="links__item">Training &rarr;</a>
+      <a href="/races-news/" class="links__item">Races &amp; News &rarr;</a>
+      <a href="/gear/" class="links__item">Gear &rarr;</a>
+    </nav>
+  </PageHead>
+  <StationGrid title="Or pick a station" />
+</Base>
+
+<style>
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-bottom: 8px;
+  }
+
+  .links__item {
+    padding: 10px 16px;
+    border: 2px solid var(--ink);
+    font-weight: 600;
+  }
+</style>
