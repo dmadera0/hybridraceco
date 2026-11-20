@@ -1,0 +1,50 @@
+---
+/**
+ * An article's hero image, optimised by Astro (resized, WebP, responsive srcset), or the
+ * bracketed [PHOTO: ...] placeholder block when the article has no image yet.
+ * Pass `class` for sizing/aspect ratio; scoped styles from the parent still apply.
+ */
+import { Image } from 'astro:assets';
+import type { Article } from '../lib/articles';
+import { heroPlaceholder } from '../lib/articles';
+
+interface Props {
+  article: Article;
+  class?: string;
+  /** Rendered widths for the srcset. */
+  widths?: number[];
+  /** sizes attribute describing the displayed width. */
+  sizes: string;
+  /** Eager-load images that appear above the fold. */
+  priority?: boolean;
+  /** Element used for the placeholder; `span` inside links that expect inline content. */
+  placeholderTag?: 'div' | 'span';
+  [key: string]: unknown;
+}
+
+const {
+  article,
+  class: className,
+  widths = [480, 800, 1200, 1600, 2400],
+  sizes,
+  priority = false,
+  placeholderTag: Tag = 'div',
+  ...rest
+} = Astro.props;
+const { heroImage, heroAlt } = article.data;
+---
+
+{heroImage ? (
+  <Image
+    src={heroImage}
+    alt={heroAlt}
+    widths={widths.filter((w) => w <= heroImage.width)}
+    sizes={sizes}
+    loading={priority ? 'eager' : 'lazy'}
+    fetchpriority={priority ? 'high' : undefined}
+    class={className}
+    {...rest}
+  />
+) : (
+  <Tag class:list={[className, 'placeholder']} {...rest}>{heroPlaceholder(article)}</Tag>
+)}

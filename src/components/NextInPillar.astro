@@ -1,7 +1,8 @@
 ---
 /** "Next in <pillar>" banner plus "More like this" grid on ink. From the final <section> in design/article.html. */
 import type { Article } from '../lib/articles';
-import { articlePath, heroPlaceholder, pillarLabel } from '../lib/articles';
+import { articlePath, pillarLabel } from '../lib/articles';
+import HeroImage from './HeroImage.astro';
 
 interface Props {
   next?: Article;
@@ -28,11 +29,13 @@ const { next, related } = Astro.props;
         <div class="more__grid">
           {related.map((article) => (
             <a href={articlePath(article)} class="more__card">
-              {article.data.heroImage ? (
-                <img class="more__image" src={article.data.heroImage} alt={article.data.heroAlt} width="1200" height="800" />
-              ) : (
-                <span class="more__image placeholder">{heroPlaceholder(article)}</span>
-              )}
+              <HeroImage
+                article={article}
+                class="more__image"
+                widths={[400, 800, 1200]}
+                sizes="(min-width: 1240px) 384px, (min-width: 640px) 45vw, calc(100vw - 48px)"
+                placeholderTag="span"
+              />
               <span class="more__pillar eyebrow">{pillarLabel(article.data.pillar).toUpperCase()}</span>
               <span class="more__card-title">{article.data.title}</span>
             </a>
@@ -117,6 +120,9 @@ const { next, related } = Astro.props;
     aspect-ratio: 3 / 2;
     width: 100%;
     object-fit: cover;
+  }
+
+  .more__image.placeholder {
     padding: 12px;
     font-size: 12px;
   }

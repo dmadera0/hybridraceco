@@ -5,7 +5,8 @@ pillar: training
 tags: []
 author: "[AUTHOR NAME]"
 publishDate: 2026-11-09
-heroAlt: "athlete driving the sled, race floor behind"
+heroImage: ../../assets/images/sled-push-athlete.jpg
+heroAlt: "Athlete in a headband leaning into the poles of a sled on an indoor track, head down, mid-push"
 summary:
   - "[SUMMARY POINT 1]"
   - "[SUMMARY POINT 2]"

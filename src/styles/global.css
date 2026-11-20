@@ -48,6 +48,11 @@ svg {
   max-width: 100%;
 }
 
+/* Let CSS aspect-ratio decide the height of sized images. */
+img {
+  height: auto;
+}
+
 button,
 input {
   font: inherit;

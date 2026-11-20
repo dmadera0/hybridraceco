@@ -5,6 +5,8 @@
  * More like this. Canonical/Open Graph/Article structured data are added in build step 5.
  */
 import { getEntry, render } from 'astro:content';
+import { getImage } from 'astro:assets';
+import HeroImage from '../components/HeroImage.astro';
 import Base from './Base.astro';
 import ArticleSidebar from '../components/ArticleSidebar.astro';
 import ReadNextCard from '../components/ReadNextCard.astro';
@@ -13,7 +15,6 @@ import {
   type Article,
   formatDate,
   getPublishedArticles,
-  heroPlaceholder,
   isoDate,
   pillarLabel,
   pillarPath,
@@ -45,6 +46,11 @@ const split = html ? splitForReadNext(html) : undefined;
 
 const minutes = readTime(article.body);
 
+// 1200px JPEG for Open Graph and structured data (social sites don't all accept WebP).
+const shareImage = data.heroImage
+  ? (await getImage({ src: data.heroImage, width: 1200, format: 'jpg' })).src
+  : undefined;
+
 // Article and breadcrumb structured data. Placeholder values such as "[AUTHOR NAME]" are left out
 // rather than published as facts.
 const url = new URL(Astro.url.pathname, Astro.site).href;
@@ -60,7 +66,7 @@ const articleLd: Record<string, unknown> = {
   publisher: { '@type': 'Organization', name: SITE_NAME, url: new URL('/', Astro.site).href },
 };
 if (!isPlaceholder(data.author)) articleLd.author = { '@type': 'Person', name: data.author };
-if (data.heroImage) articleLd.image = [new URL(data.heroImage, Astro.site).href];
+if (shareImage) articleLd.image = [new URL(shareImage, Astro.site).href];
 if (data.tags.length) articleLd.keywords = data.tags.join(', ');
 if (minutes) articleLd.timeRequired = `PT${minutes}M`;
 
@@ -83,7 +89,7 @@ const firstTag = data.tags[0];
   footerDivider
   seo={{
     type: 'article',
-    image: data.heroImage,
+    image: shareImage,
     imageAlt: data.heroAlt,
     publishedTime: data.publishDate,
     section: pillarLabel(data.pillar),
@@ -111,11 +117,7 @@ const firstTag = data.tags[0];
       <time datetime={isoDate(data.publishDate)}>{formatDate(data.publishDate)}</time>
       <span>{minutes} min read</span>
     </div>
-    {data.heroImage ? (
-      <img class="hero" src={data.heroImage} alt={data.heroAlt} width="2100" height="900" />
-    ) : (
-      <div class="hero placeholder">{heroPlaceholder(article)}</div>
-    )}
+    <HeroImage article={article} class="hero" sizes="(min-width: 1240px) 1192px, calc(100vw - 48px)" priority />
   </div>
 
   <div class="container layout">

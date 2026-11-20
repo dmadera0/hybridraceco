@@ -1,7 +1,8 @@
 ---
 /** Three pillar columns. Ported from the three-column <section> in design/home.html. */
 import type { Article, Pillar } from '../lib/articles';
-import { PILLARS, articlePath, heroPlaceholder, pillarPath } from '../lib/articles';
+import { PILLARS, articlePath, pillarPath } from '../lib/articles';
+import HeroImage from './HeroImage.astro';
 
 interface Props {
   /** Articles per pillar, newest first; the first gets the image slot. */
@@ -22,11 +23,12 @@ const { columns } = Astro.props;
         </div>
         {first && (
           <>
-            {first.data.heroImage ? (
-              <img class="pillar__image" src={first.data.heroImage} alt={first.data.heroAlt} width="1200" height="800" />
-            ) : (
-              <div class="pillar__image placeholder">{heroPlaceholder(first)}</div>
-            )}
+            <HeroImage
+              article={first}
+              class="pillar__image"
+              widths={[400, 800, 1200]}
+              sizes="(min-width: 1240px) 384px, (min-width: 728px) 33vw, calc(100vw - 48px)"
+            />
             <a href={articlePath(first)} class="pillar__lead">{first.data.title}</a>
           </>
         )}
@@ -74,6 +76,9 @@ const { columns } = Astro.props;
     width: 100%;
     object-fit: cover;
     margin-top: 18px;
+  }
+
+  .pillar__image.placeholder {
     padding: 12px;
     font-size: 12px;
   }

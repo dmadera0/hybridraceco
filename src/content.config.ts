@@ -8,14 +8,15 @@ export const PILLAR_SLUGS = ['training', 'races-news', 'gear'] as const;
 /** Articles: /<pillar>/<slug>/. The entry id (file name) is the slug. */
 const articles = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/articles' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     dek: z.string(),
     pillar: z.enum(PILLAR_SLUGS),
     tags: z.array(z.string()).default([]),
     author: z.string(),
     publishDate: z.coerce.date(),
-    heroImage: z.string().optional(),
+    /** Path relative to the article file, e.g. ../../assets/images/photo.jpg */
+    heroImage: image().optional(),
     heroAlt: z.string(),
     /** The short version: exactly three bullets. */
     summary: z.array(z.string()).length(3),

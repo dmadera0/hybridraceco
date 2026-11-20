@@ -1,7 +1,8 @@
 ---
 /** Article card on ground: image, pillar, title, dek, meta. Light-ground version of "More like this". */
 import type { Article } from '../lib/articles';
-import { articlePath, formatDate, heroPlaceholder, isoDate, readTime } from '../lib/articles';
+import { articlePath, formatDate, isoDate, readTime } from '../lib/articles';
+import HeroImage from './HeroImage.astro';
 
 interface Props {
   article: Article;
@@ -14,11 +15,14 @@ const { data } = article;
 ---
 
 <article class:list={['card', { 'card--feature': feature }]}>
-  {data.heroImage ? (
-    <img class="card__image" src={data.heroImage} alt={data.heroAlt} width="1200" height="800" />
-  ) : (
-    <div class="card__image placeholder">{heroPlaceholder(article)}</div>
-  )}
+  <HeroImage
+    article={article}
+    class="card__image"
+    sizes={feature
+      ? '(min-width: 1240px) 760px, (min-width: 960px) 62vw, calc(100vw - 48px)'
+      : '(min-width: 1240px) 384px, (min-width: 640px) 45vw, calc(100vw - 48px)'}
+    priority={feature}
+  />
   <div class="card__text">
     <h2 class="card__title"><a href={articlePath(article)}>{data.title}</a></h2>
     <p class="card__dek">{data.dek}</p>
@@ -41,6 +45,9 @@ const { data } = article;
     aspect-ratio: 3 / 2;
     width: 100%;
     object-fit: cover;
+  }
+
+  .card__image.placeholder {
     padding: 12px;
     font-size: 12px;
   }
@@ -84,6 +91,9 @@ const { data } = article;
   .card--feature .card__image {
     flex: 999 1 560px;
     aspect-ratio: 16 / 9;
+  }
+
+  .card--feature .card__image.placeholder {
     padding: 16px;
     font-size: 13px;
   }

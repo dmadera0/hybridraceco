@@ -7,6 +7,7 @@ import StartHere from '../components/StartHere.astro';
 import StationGrid from '../components/StationGrid.astro';
 import PillarColumns from '../components/PillarColumns.astro';
 import NewsletterBand from '../components/NewsletterBand.astro';
+import { getImage } from 'astro:assets';
 import { SITE_DESCRIPTION } from '../lib/site';
 import { PILLARS, getPublishedArticles, type Article, type Pillar } from '../lib/articles';
 
@@ -18,6 +19,10 @@ const PER_PILLAR = 3;
 const articles = await getPublishedArticles();
 const [lead, ...others] = articles;
 const latest = others.slice(0, LATEST_COUNT);
+// The lead story's photo doubles as the homepage share image.
+const shareImage = lead?.data.heroImage
+  ? (await getImage({ src: lead.data.heroImage, width: 1200, format: 'jpg' })).src
+  : undefined;
 const shown = new Set([lead, ...latest].filter(Boolean).map((a) => a.id));
 
 const columns = Object.fromEntries(
@@ -31,6 +36,7 @@ const columns = Object.fromEntries(
 <Base
   title="HybridRaceCo"
   description={SITE_DESCRIPTION}
+  seo={{ image: shareImage, imageAlt: lead?.data.heroAlt }}
 >
   <NextRaceStrip slot="before-header" />
 
