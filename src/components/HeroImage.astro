@@ -1,7 +1,7 @@
 ---
 /**
- * An article's hero image, optimised by Astro (resized, WebP, responsive srcset), or the
- * bracketed [PHOTO: ...] placeholder block when the article has no image yet.
+ * An article's hero image, optimised by Astro (resized, WebP at quality 68, responsive srcset),
+ * or the bracketed [PHOTO: ...] placeholder block when the article has no image yet.
  * Pass `class` for sizing/aspect ratio; scoped styles from the parent still apply.
  */
 import { Image } from 'astro:assets';
@@ -40,6 +40,7 @@ const { heroImage, heroAlt } = article.data;
     alt={heroAlt}
     widths={widths.filter((w) => w <= heroImage.width)}
     sizes={sizes}
+    quality={68}
     loading={priority ? 'eager' : 'lazy'}
     fetchpriority={priority ? 'high' : undefined}
     class={className}

@@ -5,7 +5,8 @@ pillar: gear
 tags: []
 author: "[AUTHOR NAME]"
 publishDate: 2026-11-07
-heroAlt: "to be chosen"
+heroImage: ../../assets/images/running-shoes-dumbbells.jpg
+heroAlt: "Pair of blue running shoes laid out between two black dumbbells, with a jump rope below, on a dark exercise mat"
 summary:
   - "[SUMMARY POINT 1]"
   - "[SUMMARY POINT 2]"
