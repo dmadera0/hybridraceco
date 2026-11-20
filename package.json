@@ -11,7 +11,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "astro": "astro"
+    "astro": "astro",
+    "races:import": "node scripts/import-races.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.1.3",

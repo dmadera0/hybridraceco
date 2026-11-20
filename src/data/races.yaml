@@ -8,15 +8,391 @@
 #
 # Fields
 #   city:   name shown in the strip
+#   event:  official event name, for your reference only (optional, not shown)
 #   start:  first day, YYYY-MM-DD
 #   end:    last day, YYYY-MM-DD (same as start for a one-day race)
 #
 # Order doesn't matter. Past races can stay or be deleted.
+#
+# To replace the whole list from a spreadsheet export (columns: Race City, Event Name, Date):
+#   npm run races:import -- path/to/races.csv
 
 - city: Dallas
+  event: HYROX DALLAS
   start: 2026-11-18
   end: 2026-11-22
 
 - city: Guangzhou
+  event: SIMPLOVE HYROX GUANGZHOU
   start: 2026-11-20
   end: 2026-11-22
+
+- city: Poznań
+  event: BOSS PARFUMS HYROX POZNAŃ
+  start: 2026-11-20
+  end: 2026-11-22
+
+- city: Rio de Janeiro
+  event: CHEVROLET HYROX RIO DE JANEIRO
+  start: 2026-11-21
+  end: 2026-11-22
+
+- city: Gujarat
+  event: INDUSIND BANK HYROX GUJARAT
+  start: 2026-11-26
+  end: 2026-11-28
+
+- city: Johannesburg
+  event: VIRGIN ACTIVE HYROX JOHANNESBURG
+  start: 2026-11-26
+  end: 2026-11-29
+
+- city: Singapore
+  event: AIA HYROX SINGAPORE
+  start: 2026-11-26
+  end: 2026-11-29
+
+- city: Utrecht
+  event: DECATHLON HYROX UTRECHT
+  start: 2026-11-26
+  end: 2026-11-30
+
+- city: Dubai
+  event: HYROX DUBAI
+  start: 2026-11-27
+  end: 2026-11-28
+
+- city: London
+  event: AMAZON HYROX LONDON
+  start: 2026-12-02
+  end: 2026-12-06
+
+- city: Anaheim
+  event: CENTR HYROX ANAHEIM
+  start: 2026-12-03
+  end: 2026-12-06
+
+- city: Milan
+  event: HYROX MILAN
+  start: 2026-12-04
+  end: 2026-12-06
+
+- city: Sanya
+  event: "24/7 FITNESS HYROX SANYA"
+  start: 2026-12-05
+  end: 2026-12-06
+
+- city: Melbourne
+  event: BYD HYROX MELBOURNE
+  start: 2026-12-09
+  end: 2026-12-13
+
+- city: Nashville
+  event: HYROX NASHVILLE
+  start: 2026-12-09
+  end: 2026-12-13
+
+- city: Frankfurt
+  event: FITNESS FIRST HYROX FRANKFURT
+  start: 2026-12-10
+  end: 2026-12-13
+
+- city: Kuala Lumpur
+  event: AIRASIA HYROX KUALA LUMPUR
+  start: 2026-12-10
+  end: 2026-12-13
+
+- city: Stockholm
+  event: INTERSPORT HYROX STOCKHOLM
+  start: 2026-12-10
+  end: 2026-12-13
+
+- city: Paris
+  event: FITNESS PARK HYROX PARIS
+  start: 2026-12-12
+  end: 2026-12-20
+
+- city: Gent
+  event: HYROX GENT
+  start: 2026-12-17
+  end: 2026-12-20
+
+- city: Vancouver
+  event: HYROX VANCOUVER
+  start: 2026-12-17
+  end: 2026-12-20
+
+- city: Helsinki
+  event: HYROX HELSINKI I
+  start: 2026-12-18
+  end: 2026-12-20
+
+- city: Hong Kong
+  event: AIA HYROX HONG KONG
+  start: 2027-01-07
+  end: 2027-01-10
+
+- city: Noida
+  event: HYROX NOIDA
+  start: 2027-01-15
+  end: 2027-01-17
+
+- city: Manchester
+  event: CREAPURE HYROX MANCHESTER
+  start: 2027-01-20
+  end: 2027-01-31
+
+- city: Osaka
+  event: BYD HYROX OSAKA
+  start: 2027-01-21
+  end: 2027-01-25
+
+- city: Amsterdam
+  event: HYROX AMSTERDAM
+  start: 2027-01-22
+  end: 2027-01-31
+
+- city: Verona
+  event: HYROX VERONA
+  start: 2027-01-28
+  end: 2027-01-31
+
+- city: Toulouse
+  event: LUCIS HYROX TOULOUSE
+  start: 2027-02-03
+  end: 2027-02-07
+
+- city: Auckland
+  event: BYD HYROX AUCKLAND
+  start: 2027-02-04
+  end: 2027-02-07
+
+- city: Bilbao
+  event: HYROX BILBAO
+  start: 2027-02-05
+  end: 2027-02-07
+
+- city: Bangkok
+  event: BYD HYROX BANGKOK
+  start: 2027-02-11
+  end: 2027-02-14
+
+- city: Chicago
+  event: CREAPURE HYROX CHICAGO
+  start: 2027-02-11
+  end: 2027-02-15
+
+- city: Basel
+  event: HYROX BASEL
+  start: 2027-02-12
+  end: 2027-02-14
+
+- city: Cancún
+  event: HYROX CANCUN
+  start: 2027-02-18
+  end: 2027-02-21
+
+- city: Katowice
+  event: DAFI HYROX KATOWICE
+  start: 2027-02-19
+  end: 2027-02-21
+
+- city: Vienna
+  event: INTERSPORT HYROX VIENNA
+  start: 2027-02-19
+  end: 2027-02-21
+
+- city: Phoenix
+  event: INBODY HYROX PHOENIX
+  start: 2027-02-25
+  end: 2027-02-28
+
+- city: Mechelen
+  event: HYROX MECHELEN
+  start: 2027-03-03
+  end: 2027-03-07
+
+- city: Hanoi
+  event: AIA HYROX HANOI
+  start: 2027-03-06
+  end: 2027-03-07
+
+- city: Santiago
+  event: HYROX SANTIAGO
+  start: 2027-03-06
+  end: 2027-03-06
+
+- city: Glasgow
+  event: HYROX GLASGOW
+  start: 2027-03-10
+  end: 2027-03-14
+
+- city: Las Vegas
+  event: MYFITNESSPAL HYROX LAS VEGAS
+  start: 2027-03-12
+  end: 2027-03-14
+
+- city: Taipei
+  event: HYROX TAIPEI
+  start: 2027-03-12
+  end: 2027-03-14
+
+- city: Madrid
+  event: FITNESS PARK HYROX MADRID
+  start: 2027-03-17
+  end: 2027-03-21
+
+- city: Guadalajara
+  event: HYROX GUADALAJARA
+  start: 2027-03-19
+  end: 2027-03-21
+
+- city: Buenos Aires
+  event: HYROX BUENOS AIRES
+  start: 2027-03-20
+  end: 2027-03-21
+
+- city: Cape Town
+  event: "VIRGIN ACTIVE HYROX CAPE TOWN ||"
+  start: 2027-03-25
+  end: 2027-03-28
+
+- city: Copenhagen
+  event: BIOTHERM HYROX COPENHAGEN
+  start: 2027-03-25
+  end: 2027-03-28
+
+- city: Miami Beach
+  event: SWEATPALS HYROX MIAMI BEACH
+  start: 2027-03-26
+  end: 2027-03-28
+
+- city: Brisbane
+  event: BYD HYROX BRISBANE
+  start: 2027-03-31
+  end: 2027-04-05
+
+- city: Houston
+  event: ACADEMY HYROX HOUSTON
+  start: 2027-04-01
+  end: 2027-04-04
+
+- city: Rotterdam
+  event: DECATHLON HYROX ROTTERDAM
+  start: 2027-04-01
+  end: 2027-04-04
+
+- city: Bari
+  event: HYROX BARI
+  start: 2027-04-02
+  end: 2027-04-04
+
+- city: Warsaw
+  event: MEDICOVER SPORT HYROX WARSAW
+  start: 2027-04-07
+  end: 2027-04-11
+
+- city: Cologne
+  event: ALL INCLUSIVE FITNESS HYROX COLOGNE
+  start: 2027-04-08
+  end: 2027-04-11
+
+- city: Paris
+  event: MAYBELLINE HYROX PARIS GRAND PALAIS
+  start: 2027-04-08
+  end: 2027-04-12
+
+- city: Málaga
+  event: HYROX MÁLAGA
+  start: 2027-04-15
+  end: 2027-04-18
+
+- city: Helsinki
+  event: HYROX HELSINKI II
+  start: 2027-04-16
+  end: 2027-04-18
+
+- city: Monterrey
+  event: HYROX MONTERREY
+  start: 2027-04-16
+  end: 2027-04-18
+
+- city: Nagoya
+  event: JR CENTRAL HYROX NAGOYA
+  start: 2027-04-16
+  end: 2027-04-18
+
+- city: Ottawa
+  event: BIOTHERM HYROX OTTAWA
+  start: 2027-04-21
+  end: 2027-04-25
+
+- city: Atlanta
+  event: "FACTOR_ HYROX ATLANTA"
+  start: 2027-04-23
+  end: 2027-04-25
+
+- city: London
+  event: ORIGINAL SOURCE HYROX LONDON OLYMPIA
+  start: 2027-04-24
+  end: 2027-05-02
+
+- city: Kraków
+  event: HYROX KRAKÓW
+  start: 2027-05-07
+  end: 2027-05-09
+
+- city: Minneapolis
+  event: HYROX MINNEAPOLIS
+  start: 2027-05-07
+  end: 2027-05-09
+
+- city: São Paulo
+  event: HYROX SÃO PAULO
+  start: 2027-05-08
+  end: 2027-05-09
+
+- city: Lyon
+  event: HYROX LYON
+  start: 2027-05-12
+  end: 2027-05-16
+
+- city: Incheon
+  event: BYD HYROX INCHEON
+  start: 2027-05-13
+  end: 2027-05-16
+
+- city: San Diego
+  event: EŌS FITNESS HYROX SAN DIEGO
+  start: 2027-05-13
+  end: 2027-05-16
+
+- city: Bengaluru
+  event: HYROX BENGALURU
+  start: 2027-05-19
+  end: 2027-05-23
+
+- city: Cardiff
+  event: HYROX CARDIFF
+  start: 2027-05-20
+  end: 2027-05-29
+
+- city: Portland
+  event: THE FEED HYROX PORTLAND
+  start: 2027-05-21
+  end: 2027-05-23
+
+- city: Rimini
+  event: HYROX RIMINI
+  start: 2027-05-27
+  end: 2027-05-30
+
+- city: Riga
+  event: HYROX RIGA
+  start: 2027-05-28
+  end: 2027-05-30
+
+- city: Hong Kong
+  event: PUMA HYROX WORLD CHAMPIONSHIPS HONG KONG
+  start: 2027-06-10
+  end: 2027-06-13

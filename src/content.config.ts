@@ -66,6 +66,8 @@ const races = defineCollection({
   schema: z
     .object({
       city: z.string().min(1),
+      /** Official event name, kept for reference; not displayed. */
+      event: z.string().optional(),
       start: z.coerce.date(),
       end: z.coerce.date(),
     })
