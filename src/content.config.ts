@@ -1,6 +1,7 @@
 import { defineCollection, reference } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob, file } from 'astro/loaders';
+import { parse as parseYaml } from 'yaml';
 
 export const PILLAR_SLUGS = ['training', 'races-news', 'gear'] as const;
 
@@ -50,4 +51,25 @@ const startHere = defineCollection({
   }),
 });
 
-export const collections = { articles, stations, startHere };
+/**
+ * Race calendar for the next-race strip, maintained by hand in src/data/races.yaml.
+ * Entries need no id; one is derived from city and start date.
+ */
+const races = defineCollection({
+  loader: file('./src/data/races.yaml', {
+    parser: (text) =>
+      (parseYaml(text) as Record<string, unknown>[]).map((race) => ({
+        ...race,
+        id: `${race.city}-${race.start}`.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      })),
+  }),
+  schema: z
+    .object({
+      city: z.string().min(1),
+      start: z.coerce.date(),
+      end: z.coerce.date(),
+    })
+    .refine((r) => r.end >= r.start, { message: 'end must be on or after start' }),
+});
+
+export const collections = { articles, stations, startHere, races };

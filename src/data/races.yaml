@@ -1,0 +1,22 @@
+# Race calendar for the next-race strip on the homepage.
+#
+# Add each race by hand. The strip works it out from today's date on every build,
+# and the site rebuilds every morning:
+#   - races where today falls between start and end show as  ON NOW · DALLAS · GUANGZHOU
+#   - otherwise the next race to start shows as             NEXT UP · CITY · 26–29 NOV 2026
+#   - with no current or upcoming race, the strip is hidden
+#
+# Fields
+#   city:   name shown in the strip
+#   start:  first day, YYYY-MM-DD
+#   end:    last day, YYYY-MM-DD (same as start for a one-day race)
+#
+# Order doesn't matter. Past races can stay or be deleted.
+
+- city: Dallas
+  start: 2026-11-18
+  end: 2026-11-22
+
+- city: Guangzhou
+  start: 2026-11-20
+  end: 2026-11-22

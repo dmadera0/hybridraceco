@@ -1,24 +1,53 @@
 ---
 /**
- * Next-race strip above the header (homepage only).
- * Ported from the first ink band in design/home.html.
- * City and date are placeholders until real race data is wired in.
+ * Next-race strip above the header (homepage only). Ported from the first ink band in
+ * design/home.html. Races come from src/data/races.yaml (edited by hand) and the strip is
+ * worked out at build time; a daily scheduled rebuild rolls it over as races start and finish.
+ *   - Races on now:  ON NOW · DALLAS · GUANGZHOU
+ *   - Otherwise:     NEXT UP · SANTIAGO · 6 MAR 2027  (several starting together: FROM <date>)
+ *   - No current or upcoming race: the strip is not rendered
+ * The link goes to the hyrox.com home page only; their terms of use (section 7.4) permit
+ * linking to the home page and nowhere else on the site.
  */
-interface Props {
-  city?: string;
-  date?: string;
-  href?: string;
-}
+import { formatRaceDates, getRaceStatus } from '../lib/races';
 
-const { city = '[NEXT RACE CITY]', date = '[RACE DATE]', href = '/races-news/' } = Astro.props;
+const HYROX_HOME = 'https://hyrox.com/';
+
+const status = await getRaceStatus();
+const { races } = status;
+
+const dateText =
+  status.kind !== 'next'
+    ? undefined
+    : races.length === 1
+      ? formatRaceDates(races[0].start, races[0].end)
+      : `From ${formatRaceDates(races[0].start, races[0].start)}`;
 ---
 
-<div class="next-race on-ink">
-  <div class="container next-race__inner">
-    <span class="next-race__label">NEXT UP &middot; {city} &middot; {date}</span>
-    <a href={href} class="next-race__link">Race guide &rarr;</a>
+{status.kind !== 'none' && (
+  <div class="next-race on-ink">
+    <div class="container next-race__inner">
+      <p class="next-race__label">
+        <span>{status.kind === 'live' ? 'ON NOW' : 'NEXT UP'}</span>
+        {races.map((race) => (
+          <>
+            <span aria-hidden="true">&middot;</span>
+            <span class="next-race__city">{race.city}</span>
+          </>
+        ))}
+        {dateText && (
+          <>
+            <span aria-hidden="true">&middot;</span>
+            <span>{dateText.toUpperCase()}</span>
+          </>
+        )}
+      </p>
+      <a href={HYROX_HOME} class="next-race__link" rel="noopener" aria-label="Official HYROX site (hyrox.com)">
+        Official site &rarr;
+      </a>
+    </div>
   </div>
-</div>
+)}
 
 <style>
   .next-race {
@@ -31,7 +60,7 @@ const { city = '[NEXT RACE CITY]', date = '[RACE DATE]', href = '/races-news/' }
     padding-bottom: 4px;
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 20px;
+    gap: 0 20px;
     align-items: center;
     justify-content: space-between;
     font-family: var(--font-mono);
@@ -39,7 +68,16 @@ const { city = '[NEXT RACE CITY]', date = '[RACE DATE]', href = '/races-news/' }
   }
 
   .next-race__label {
+    margin: 0;
+    padding: 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.6em;
     letter-spacing: 0.04em;
+  }
+
+  .next-race__city {
+    text-transform: uppercase;
   }
 
   /* Accent as text is fine on ink (see CLAUDE.md) */

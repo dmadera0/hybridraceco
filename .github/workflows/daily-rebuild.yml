@@ -1,0 +1,25 @@
+# Rebuild the site every morning so date-driven content, such as the next-race strip,
+# rolls over without a code push. Calls an Amplify incoming webhook for the main branch.
+# Requires the repository secret AMPLIFY_BUILD_WEBHOOK (from Amplify > Build settings > Incoming webhooks).
+name: Daily rebuild
+
+on:
+  schedule:
+    - cron: '0 5 * * *' # 05:00 UTC every day
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Amplify build
+        env:
+          WEBHOOK: ${{ secrets.AMPLIFY_BUILD_WEBHOOK }}
+        run: |
+          if [ -z "$WEBHOOK" ]; then
+            echo "::error::AMPLIFY_BUILD_WEBHOOK secret is not set."
+            exit 1
+          fi
+          curl --fail --silent --show-error -X POST -H 'Content-Type: application/json' -d '{}' "$WEBHOOK"
